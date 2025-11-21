@@ -1,119 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gameService } from '../services/api';
 
-const GameCard = ({ game, onUpdate }) => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleDelete = async () => {
-    if (window.confirm(`¿Eliminar "${game.title}"?`)) {
-      try {
-        await gameService.delete(game._id);
-        onUpdate();
-      } catch (error) {
-        console.error('Error deleting game:', error);
-      }
-    }
-  };
-
-  const handleToggleComplete = async () => {
-    try {
-      await gameService.update(game._id, {
-        completed: !game.completed
-      });
-      onUpdate();
-    } catch (error) {
-      console.error('Error updating game:', error);
-    }
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveEdit = () => {
-    setIsEditing(false);
-    onUpdate(); // Recargar los juegos después de editar
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
-
-  // Si está en modo edición, mostrar el formulario de edición
-  if (isEditing) {
-    return (
-      <EditGameForm 
-        game={game}
-        onSave={handleSaveEdit}
-        onCancel={handleCancelEdit}
-      />
-    );
-  }
-
-  return (
-    <div className={`game-card ${game.completed ? 'completed' : ''}`}>
-      <div className="game-card-header">
-        {game.cover ? (
-          <img src={game.cover} alt={game.title} className="game-cover" />
-        ) : (
-          <div className="game-cover-placeholder">🎮</div>
-        )}
-        {game.completed && (
-          <div className="completed-badge">✅ Completado</div>
-        )}
-      </div>
-      
-      <div className="game-card-body">
-        <h3 className="game-title">{game.title}</h3>
-        
-        <div className="game-meta">
-          <span className="game-platform">{game.platform}</span>
-          <span className="game-genre">{game.genre}</span>
-        </div>
-
-        <div className="game-rating">
-          {'⭐'.repeat(game.rating || 1)}
-        </div>
-
-        {game.description && (
-          <p className="game-description">{game.description}</p>
-        )}
-
-        <div className="game-hours">
-          ⏱️ {game.hoursPlayed || 0} horas jugadas
-        </div>
-      </div>
-
-      <div className="game-card-actions">
-        <button 
-          className={game.completed ? 'btn-uncomplete' : 'btn-toggle'}
-          onClick={handleToggleComplete}
-        >
-          {game.completed ? '↶ Reanudar' : '✅ Completar'}
-        </button>
-        <button className="btn-edit" onClick={handleEdit}>
-          ✏️ Editar
-        </button>
-        <button className="btn-delete" onClick={handleDelete}>
-          🗑️ Eliminar
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Componente de formulario de edición (puedes moverlo a un archivo separado después)
 const EditGameForm = ({ game, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
-    title: game.title || '',
-    cover: game.cover || '',
-    platform: game.platform || 'PC',
-    genre: game.genre || 'Acción',
-    hoursPlayed: game.hoursPlayed || 0,
-    rating: game.rating || 3,
-    completed: game.completed || false,
-    description: game.description || ''
+    title: '',
+    cover: '',
+    platform: 'PC',
+    genre: 'Acción',
+    hoursPlayed: 0,
+    rating: 3,
+    completed: false,
+    description: ''
   });
+
+  useEffect(() => {
+    if (game) {
+      setFormData({
+        title: game.title || '',
+        cover: game.cover || '',
+        platform: game.platform || 'PC',
+        genre: game.genre || 'Acción',
+        hoursPlayed: game.hoursPlayed || 0,
+        rating: game.rating || 3,
+        completed: game.completed || false,
+        description: game.description || ''
+      });
+    }
+  }, [game]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -141,6 +54,7 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
         <h2>✏️ Editar Juego</h2>
         
         <form className="game-form" onSubmit={handleSubmit}>
+          {/* Mismo formulario que GameForm pero con datos precargados */}
           <div className="form-group">
             <label htmlFor="title">Título del Juego</label>
             <input
@@ -266,4 +180,4 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
   );
 };
 
-export default GameCard;
+export default EditGameForm;
