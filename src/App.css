@@ -1,38 +1,174 @@
+/* Estilos básicos para GameTracker */
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5em;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-danger:hover {
+  background: #da190b;
+}
+
+.btn-secondary {
+  background: #757575;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.btn-secondary:hover {
+  background: #5a5a5a;
+}
+
+/* Game Library */
+.game-library {
+  margin-top: 30px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Game Card */
+.game-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.game-cover img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.no-cover {
+  width: 100%;
+  height: 200px;
+  background: #f0f0f0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 3em;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+.game-info h3 {
+  margin: 10px 0;
+  color: #333;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.game-info p {
+  margin: 5px 0;
+  color: #666;
+}
+
+/* Game Form */
+.game-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.game-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.game-form input,
+.game-form select,
+.game-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row label {
+  flex: 1;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-label input {
+  width: auto;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
 }
