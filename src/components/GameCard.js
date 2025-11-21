@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { gameService } from '../services/api';
+import ReviewSystem from './ReviewSystem';
 
 const GameCard = ({ game, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
 
   const handleDelete = async () => {
     if (window.confirm(`¿Eliminar "${game.title}"?`)) {
@@ -11,6 +13,7 @@ const GameCard = ({ game, onUpdate }) => {
         onUpdate();
       } catch (error) {
         console.error('Error deleting game:', error);
+        alert('Error al eliminar el juego');
       }
     }
   };
@@ -23,6 +26,7 @@ const GameCard = ({ game, onUpdate }) => {
       onUpdate();
     } catch (error) {
       console.error('Error updating game:', error);
+      alert('Error al actualizar el juego');
     }
   };
 
@@ -32,11 +36,15 @@ const GameCard = ({ game, onUpdate }) => {
 
   const handleSaveEdit = () => {
     setIsEditing(false);
-    onUpdate(); // Recargar los juegos después de editar
+    onUpdate();
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+  };
+
+  const toggleReviews = () => {
+    setShowReviews(!showReviews);
   };
 
   // Si está en modo edición, mostrar el formulario de edición
@@ -94,15 +102,24 @@ const GameCard = ({ game, onUpdate }) => {
         <button className="btn-edit" onClick={handleEdit}>
           ✏️ Editar
         </button>
+        <button className="btn-review" onClick={toggleReviews}>
+          {showReviews ? '📖 Ocultar' : '📝 Reseñas'}
+        </button>
         <button className="btn-delete" onClick={handleDelete}>
           🗑️ Eliminar
         </button>
       </div>
+
+      {showReviews && (
+        <div className="reviews-section">
+          <ReviewSystem gameId={game._id} gameTitle={game.title} />
+        </div>
+      )}
     </div>
   );
 };
 
-// Componente de formulario de edición (puedes moverlo a un archivo separado después)
+// Componente de formulario de edición integrado
 const EditGameForm = ({ game, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     title: game.title || '',
@@ -161,6 +178,7 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
               name="cover"
               value={formData.cover}
               onChange={handleChange}
+              placeholder="https://ejemplo.com/portada.jpg"
             />
           </div>
 
@@ -178,6 +196,7 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
                 <option value="Xbox">Xbox</option>
                 <option value="Nintendo Switch">Nintendo Switch</option>
                 <option value="Mobile">Mobile</option>
+                <option value="Otra">Otra</option>
               </select>
             </div>
 
@@ -195,6 +214,8 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
                 <option value="Estrategia">Estrategia</option>
                 <option value="Deportes">Deportes</option>
                 <option value="Indie">Indie</option>
+                <option value="Shooter">Shooter</option>
+                <option value="Simulación">Simulación</option>
               </select>
             </div>
           </div>
@@ -209,6 +230,7 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
                 value={formData.hoursPlayed}
                 onChange={handleChange}
                 min="0"
+                step="1"
               />
             </div>
 
@@ -248,6 +270,7 @@ const EditGameForm = ({ game, onSave, onCancel }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              placeholder="Describe tu experiencia con el juego..."
               rows="4"
             />
           </div>
