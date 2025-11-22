@@ -43,6 +43,7 @@ const ReviewSystem = ({ gameId, gameTitle }) => {
       loadReviews();
     } catch (error) {
       console.error('Error creating review:', error);
+      alert('Error al crear la reseña');
     }
   };
 
@@ -62,6 +63,7 @@ const ReviewSystem = ({ gameId, gameTitle }) => {
         loadReviews();
       } catch (error) {
         console.error('Error deleting review:', error);
+        alert('Error al eliminar la reseña');
       }
     }
   };
@@ -171,7 +173,7 @@ const ReviewSystem = ({ gameId, gameTitle }) => {
                 className="btn-danger btn-small"
                 onClick={() => handleDeleteReview(review._id)}
               >
-                🗑️
+                🗑️ Eliminar
               </button>
             </div>
           ))
